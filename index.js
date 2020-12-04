@@ -125,6 +125,9 @@ $(document).ready(function(){
     var hamburgerIcon = document.getElementById("hamburger_icon");
     var menuDropDown = document.getElementById("dropdown_list"); 
     var closeIcon = document.getElementById("dropdown_close_icon");
+    var clothRedirect = document.getElementById("clothing_redirection");
+    var accessoryRedirect = document.getElementById("accessory_redirection");
+    var cartRedirect = document.getElementById("cart_redirection");
 
     dropdownWrapper.addEventListener('mouseover', function(){
       menuDropDown.style.display = "block";
@@ -140,6 +143,18 @@ $(document).ready(function(){
 
     closeIcon.addEventListener('click', function(){
       menuDropDown.style.display = "none";
+    })
+
+    clothRedirect.addEventListener('click', function(){
+      menuDropDown.style.display = "none";
+    })
+  
+    accessoryRedirect.addEventListener('click', function(){
+      menuDropDown.style.display = "none";
+    })
+  
+    cartRedirect.addEventListener('click', function(){
+        menuDropDown.style.display = "none";
     })
 
     $('.carousel').slick({
