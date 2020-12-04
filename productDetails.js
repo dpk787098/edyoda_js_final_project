@@ -97,7 +97,8 @@ function createProductPreview(){
             localData = [productData];
             localData[0].count = 1;
             localStorage.setItem("cartData", JSON.stringify(localData))
-            cartCount.innerText = item_count + 1;
+            item_count += 1;
+            cartCount.innerText = item_count;
         }
         else{
             var local_data = JSON.parse(localData);
@@ -107,13 +108,15 @@ function createProductPreview(){
                 local_data[pos].count = local_data[pos].count+1;
                 local_data[pos].price = local_data[pos].price + local_data[pos].price;
                 localStorage.setItem("cartData", JSON.stringify(local_data));
-                cartCount.innerText = item_count + 1;
+                item_count += 1;
+                cartCount.innerText = item_count;
             }
             else{
                 productData.count = 1;
                 local_data.push(productData);
                 localStorage.setItem("cartData", JSON.stringify(local_data));
-                cartCount.innerText = item_count + 1;
+                item_count += 1;
+                cartCount.innerText = item_count;
             }
         }
     }
