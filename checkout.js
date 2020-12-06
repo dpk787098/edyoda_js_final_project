@@ -30,7 +30,6 @@ placeOrderButton.innerText = "Place Order";
 right_section.appendChild(placeOrderButton);
 
 function itemCardCreator(data) {
-    console.log("mnbv",data);
     var itemCard = document.createElement("div");
     itemCard.className = "checkout_item_card";
     var imgWrapper = document.createElement("div");
