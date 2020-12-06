@@ -75,7 +75,7 @@ if(locData !== null && locData.length > 0){
 }
 
 placeOrderButton.onclick = function(){
-    var locD = localStorage.getItem("cartData");
+    var locData = localStorage.getItem("cartData");
     if(locData !== null && locData.length > 0){
         var orderSuccess = new XMLHttpRequest();
         orderSuccess.open("GET", "https://5d76bf96515d1a0014085cf9.mockapi.io/order", true);
