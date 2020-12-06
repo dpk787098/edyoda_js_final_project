@@ -1,129 +1,89 @@
 var item_count=0;
 
 
-var checkoutPage = document.getElementById("checkout_section");
-var pageTitle = document.createElement("h1");
-pageTitle.className = "section_title";
-pageTitle.innerText = "Checkout";
-checkoutPage.appendChild(pageTitle);
-var checkoutContentWrapper = document.createElement("div");
-checkoutContentWrapper.className = "checout_countent_wrapper";
-checkoutPage.appendChild(checkoutContentWrapper);
-var cardList = document.createElement("div");
-cardList.className = "card_list";
-checkoutContentWrapper.appendChild(cardList);
-var totalItem = document.createElement("h3");
-totalItem.innerHTML = "Total Items: <span>0</span";
-cardList.appendChild(totalItem);
-var right_section = document.createElement("div");
-right_section.className = "right_section";
-checkoutContentWrapper.appendChild(right_section);
-var rightTitle = document.createElement("h3");
-rightTitle.innerText = "Total Amount";
-right_section.appendChild(rightTitle);
-var totAmount = document.createElement("p");
-totAmount.innerHTML = "Amount: Rs<span id='total_amount'>0</span>"
-right_section.appendChild(totAmount);
-var placeOrderButton = document.createElement("button");
-placeOrderButton.id = "place_order_button";
-placeOrderButton.innerText = "Place Order";
-right_section.appendChild(placeOrderButton);
-
-function itemCardCreator(data) {
-    console.log("mnbv",data);
-    var itemCard = document.createElement("div");
-    itemCard.className = "checkout_item_card";
-    var imgWrapper = document.createElement("div");
-    imgWrapper.className = "checkout_card_img";
-    itemCard.appendChild(imgWrapper);
-    var itemImg = document.createElement("img");
-    itemImg.src = data.preview;
-    imgWrapper.appendChild(itemImg);
-    var itemCardDetails = document.createElement("div");
-    itemCardDetails.className = "checkout_card_details";
-    itemCard.appendChild(itemCardDetails);
-    var itemName = document.createElement("h4");
-    itemName.innerText = data.name;
-    itemCardDetails.appendChild(itemName);
-    var itemCount = document.createElement("p");
-    itemCount.innerText = "x"+data.count;
-    itemCardDetails.appendChild(itemCount);
-    var cardAmount = document.createElement("p");
-    cardAmount.innerHTML = "<span>Amount: Rs </span><span>"+data.price+"</span>";
-    itemCardDetails.appendChild(cardAmount);
-    cardList.appendChild(itemCard);
-
-}
+$(document).ready(function(){
+    $('<h1 class="section_title">Checkout</h1>').appendTo('#checkout_section');
+    $('<div id="checkout_cont_wrap" class="checout_countent_wrapper"></div>').appendTo('#checkout_section');
+    $('<div id="card_lists" class="card_list"></div>').appendTo('#checkout_cont_wrap');
+    $('<h3 id="total_items">Total Items: <span>0</span</h3>').appendTo('#card_lists');
+    $('<div id="right_sect" class="right_section"></div>').appendTo('#checkout_cont_wrap');
+    $('<h3>Total Amount</h3>').appendTo('#right_sect');
+    $('<p id="tot_amt">Amount: Rs<span id="total_amount">0</span></p>').appendTo('#right_sect');
+    $('<button id="place_order_button">Place Order</button>').appendTo('#right_sect');
 
 
-var cartCount = document.getElementById("cart_item_count");
-var locData = localStorage.getItem("cartData");
-if(locData !== null && locData.length > 0){
-    var cart_data = JSON.parse(locData);
-    var sumAmt = 0;
-    for(var i=0; i<cart_data.length; i++){
-        item_count += cart_data[i].count;
-        sumAmt += cart_data[i].price;
+
+    function itemCardCreator(data) {
+        cardWrap = $('<div class="checkout_item_card"></div>').appendTo('#card_lists');
+        imgWrap = $('<div class="checkout_card_img"></div>').appendTo(cardWrap);
+        $('<img src="'+data.preview+'">').appendTo(imgWrap);
+        card_detail = $('<div class="checkout_card_details"></div>').appendTo(cardWrap);
+        $('<h4>'+data.name+'</h4>').appendTo(card_detail);
+        $('<p>X'+data.count+'</p>').appendTo(card_detail);
+        $('<p><span>Amount: Rs </span><span>'+data.price+'</span></p>').appendTo(card_detail);
     }
-    cartCount.innerText = item_count;
-    totalItem.innerHTML = "Total Items: <span>"+cart_data.length+"</span";
-    totAmount.innerHTML = "Amount: Rs<span id='total_amount'>"+sumAmt+"</span>"
 
-    for(var j=0; j<cart_data.length; j++){
-        itemCardCreator(cart_data[j]);
-    }
-}
 
-placeOrderButton.onclick = function(){
-    var locD = localStorage.getItem("cartData");
+    var locData = localStorage.getItem("cartData");
     if(locData !== null && locData.length > 0){
-        var orderSuccess = new XMLHttpRequest();
-        orderSuccess.open("GET", "https://5d76bf96515d1a0014085cf9.mockapi.io/order", true);
-        orderSuccess.onreadystatechange = function(){
-            if(this.readyState === 4){
-                localStorage.clear();
-                window.location.replace("./orderConfirmation.html");
-            }
+        var cart_data = JSON.parse(locData);
+        var sumAmt = 0;
+        for(var i=0; i<cart_data.length; i++){
+            item_count += cart_data[i].count;
+            sumAmt += cart_data[i].price;
         }
-        orderSuccess.send();
+        $('#cart_item_count').text(item_count);
+        $('#total_items').html("Total Items: <span>"+cart_data.length+"</span");
+        $('#tot_amt').html("Amount: Rs<span id='total_amount'>"+sumAmt+"</span>");
+
+        for(var j=0; j<cart_data.length; j++){
+            itemCardCreator(cart_data[j]);
+        }
     }
-    else{
-        alert("No items in your cart. Please add ateast one item to place the order");
-    }
-}
 
-var dropdownWrapper = document.getElementById("menu_dropdown");
-var hamburgerIcon = document.getElementById("hamburger_icon");
-var menuDropDown = document.getElementById("dropdown_list"); 
-var closeIcon = document.getElementById("dropdown_close_icon");
-var clothRedirect = document.getElementById("clothing_redirection");
-var accessoryRedirect = document.getElementById("accessory_redirection");
-var cartRedirect = document.getElementById("cart_redirection");
+    $('#place_order_button').on('click', function(){
+        var locData = localStorage.getItem("cartData");
+        if(locData !== null && locData.length > 0){
+            var orderSuccess = new XMLHttpRequest();
+            orderSuccess.open("GET", "https://5d76bf96515d1a0014085cf9.mockapi.io/order", true);
+            orderSuccess.onreadystatechange = function(){
+                if(this.readyState === 4){
+                    localStorage.clear();
+                    window.location.replace("./orderConfirmation.html");
+                }
+            }
+            orderSuccess.send();
+        }
+        else{
+            alert("No items in your cart. Please add ateast one item to place the order");
+        }
+    })
 
-dropdownWrapper.addEventListener('mouseover', function(){
-    menuDropDown.style.display = "block";
-})
+    $('#menu_dropdown').on('mouseover', function(){
+        $('#dropdown_list').css('display', 'block');
+    })
 
-dropdownWrapper.addEventListener('mouseout', function(){
-    menuDropDown.style.display = "none";
-})
+    $('#menu_dropdown').on('mouseout', function(){
+        $('#dropdown_list').css('display', 'none');
+    })
 
-hamburgerIcon.addEventListener('click', function(){
-    menuDropDown.style.display = "block";
-})
+    $('#hamburger_icon').on('click', function(){
+        $('#dropdown_list').css('display', 'block');
+    })
 
-closeIcon.addEventListener('click', function(){
-    menuDropDown.style.display = "none";
-})
+    $('#dropdown_close_icon').on('click', function(){
+        $('#dropdown_list').css('display', 'none');
+    })
 
-clothRedirect.addEventListener('click', function(){
-    menuDropDown.style.display = "none";
-})
+    $('#clothing_redirection').on('click', function(){
+        $('#dropdown_list').css('display', 'none');
+    })
 
-accessoryRedirect.addEventListener('click', function(){
-    menuDropDown.style.display = "none";
-})
+    $('#accessory_redirection').on('click', function(){
+        $('#dropdown_list').css('display', 'none');
+    })
 
-cartRedirect.addEventListener('click', function(){
-    menuDropDown.style.display = "none";
+    $('#cart_redirection').on('click', function(){
+        $('#dropdown_list').css('display', 'none');
+    })
 })
